@@ -1,30 +1,114 @@
-html, body {
-    background-color: lightblue;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
+/*variables*/
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #34495e;
+  --background-color: #f4f7f6;
+  --text-color: #333333;
+  --white: #ffffff;
+  --link-hover: #e8f4f8;
 }
-
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 body {
-    nav {
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            display: inline;
-            margin-right: 15px;
-        }
-
-        a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-
-            &:hover {
-                color: #0066cc;
-            }
-        }
-    }
-}     
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+/*navigation and header*/
+nav {
+  background-color: var(--primary-color);
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  gap: 1rem;
+}
+nav a {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: block;
+}
+nav a:hover, 
+nav a:focus {
+  background-color: var(--white);
+  color: var(--primary-color);
+  outline: 2px solid var(--secondary-color);
+}
+/*main content*/
+main {
+  flex: 1;
+  width: 90%;
+  margin: 1.5rem auto; 
+  padding: 1.5rem; 
+  background-color: var(--white);
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+main h1 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--background-color);
+  padding-bottom: 0.5rem;
+}
+main ul {
+  padding-left: 1.5rem;
+}
+main li {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1rem auto;
+}
+/*footer*/
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: var(--primary-color);
+  color: var(--white);
+  margin-top: auto;
+}
+/*tablets*/
+@media screen and (min-width: 641px) and (max-width: 1024px) {
+  nav ul {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  main {
+    max-width: 90%;
+    margin: 2rem auto;
+    padding: 1.5rem;
+  }
+}
+/*desktop*/
+@media screen and (min-width: 1025px) {
+  nav ul {
+    flex-direction: row;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+  main {
+    max-width: 800px;
+    margin: 3.5rem auto; 
+    padding: 2.5rem;
+  }
+}
