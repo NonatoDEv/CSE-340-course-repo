@@ -1,14 +1,16 @@
 <%- include('partials/header') %>
-    <main>
-        <h1><%= title %></h1>
-        
-        <p>Here are a few of our partner organizations:</p>
-        <ul>
+    <main class="main-container">
+        <h1 class="page-title"><%= title %></h1>
+        <p class="section-intro">Here are a few of our partner organizations:</p>
 
+        <ul class="card-grid">
             <% organizations.forEach(organization => { %>
-                <li><img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo"><strong><%= organization.name %></strong>: <%= organization.contact_email %></li>
+                <li class="card org-card">
+                    <img class="org-logo" src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
+                    <strong class="org-title"><%= organization.name %></strong>
+                    <span class="org-email"><%= organization.contact_email %></span>
+                </li>
             <% }); %>
         </ul>
     </main>
-
 <%- include('partials/footer') %>
