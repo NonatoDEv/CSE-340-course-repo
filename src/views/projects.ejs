@@ -4,9 +4,15 @@
         <h2 class="sub-title">Upcoming Service Projects</h2>
 
         <ul class="card-grid">
-            <li class="card text-card">Park Cleanup - Join us to clean up local parks and make them beautiful!</li>
-            <li class="card text-card">Food Drive - Help collect and distribute food to those in need.</li>
-            <li class="card text-card">Community Tutoring - Volunteer to tutor students in various subjects.</li>
+            <% projects.forEach((project) => { %>
+            <li class="card text-card">
+                <p>
+                    <%= new Date(project.project_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>: 
+                    <strong><%= project.project_title %></strong> 
+                    (<%= project.name %>)
+                </p>
+            </li>
+            <% }); %>
         </ul>
     </main>
 <%- include('partials/footer') %>
