@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS project_categories CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS service_projects CASCADE;
+DROP TABLE IF EXISTS organization CASCADE;
+
 -- ========================================
 -- Organization Table
 -- ========================================
@@ -57,6 +62,8 @@ VALUES
 (3, 'Backpack and School Supply Drive', 'Gathering notebooks, pencils, and backpacks for low-income students.', 'Community Sports Center, Court 1', '2026-11-24'),
 (3, 'River Cleanup Brigade', 'Collecting plastic bottles and trash along the riverbanks.', 'Riverfront Bridge, North Trail', '2026-12-05');
 
+SELECT * FROM service_projects;
+
 SELECT 
     p.project_id,
     p.title AS project_title,
@@ -66,3 +73,87 @@ SELECT
 FROM service_projects p
 JOIN organization o ON p.organization_id = o.organization_id
 ORDER BY o.organization_id, p.project_date;
+
+-- ========================================================
+-- 3. Categories Table
+-- ========================================================
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+INSERT INTO categories (name) VALUES
+('Infrastructure & Construction'),
+('Environment & Sustainability'),
+('Food Security & Nutrition'),
+('Education & Youth'),
+('Health & Community Care');
+
+SELECT * FROM categories;
+
+-- ========================================================
+-- 4. Many-to-Many Table: Project Categories
+-- ========================================================
+CREATE TABLE project_categories (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (project_id, category_id),
+    CONSTRAINT fk_project
+        FOREIGN KEY (project_id)
+        REFERENCES service_projects(project_id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_category
+        FOREIGN KEY (category_id)
+        REFERENCES categories(category_id)
+        ON DELETE CASCADE
+);
+
+-- Associate every project with at least one category
+INSERT INTO project_categories (project_id, category_id) VALUES
+-- BrightFuture Builders (Projects 1 to 5)
+(1, 1),          -- Community Center Roof Repair -> Infrastructure & Construction
+(2, 1), (2, 5),   -- Wheelchair Ramp Installation -> Infrastructure & Construction + Health & Community Care
+(3, 1), (3, 2),   -- Solar Panel Setup -> Infrastructure & Construction + Environment & Sustainability
+(4, 1), (4, 2),   -- Recycled Playground Build -> Infrastructure & Construction + Environment & Sustainability
+(5, 1), (5, 2),   -- Rainwater Tank Installation -> Infrastructure & Construction + Environment & Sustainability
+
+-- GreenHarvest Growers (Projects 6 to 10)
+(6, 2), (6, 4),   -- Rooftop Garden Workshop -> Environment & Sustainability + Education & Youth
+(7, 2), (7, 3),   -- Community Seed Bank Launch -> Environment & Sustainability + Food Security & Nutrition
+(8, 3),          -- Fresh Vegetable Harvest Day -> Food Security & Nutrition
+(9, 1), (9, 2),   -- Compost Bin Construction -> Infrastructure & Construction + Environment & Sustainability
+(10, 2), (10, 4), -- Hydroponics for Kids -> Environment & Sustainability + Education & Youth
+
+-- UnityServe Volunteers (Projects 11 to 15)
+(11, 5),         -- Community Blood Drive -> Health & Community Care
+(12, 3), (12, 5), -- Food Bank Box Packing -> Food Security & Nutrition + Health & Community Care
+(13, 5),         -- Senior Center Reading Day -> Health & Community Care
+(14, 4), (14, 5), -- Backpack and School Supply Drive -> Education & Youth + Health & Community Care
+(15, 2);         -- River Cleanup Brigade -> Environment & Sustainability
+
+SELECT COUNT(*) AS total_categories FROM categories;
+-- Result: 5 (check: >= 3)
+
+SELECT p.project_id, p.title
+FROM service_projects p
+LEFT JOIN project_categories pc ON p.project_id = pc.project_id
+WHERE pc.category_id IS NULL;
+-- Result : (0 rows)
+
+SELECT project_id, COUNT(category_id) AS total_categories
+FROM project_categories
+GROUP BY project_id
+HAVING COUNT(category_id) > 1;
+-- Result: show the projects 2, 3, 4, 5, 6, 7, 9, 10, 12 y 14 with 2 categories each one.
+
+SELECT 
+    p.project_id,
+    p.title AS project_title,
+    o.name AS organization_name,
+    STRING_AGG(c.name, ', ' ORDER BY c.name) AS categories
+FROM service_projects p
+JOIN organization o ON p.organization_id = o.organization_id
+JOIN project_categories pc ON p.project_id = pc.project_id
+JOIN categories c ON pc.category_id = c.category_id
+GROUP BY p.project_id, p.title, o.name
+ORDER BY p.project_id;

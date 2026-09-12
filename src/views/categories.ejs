@@ -1,12 +1,15 @@
 <%- include('partials/header') %>
     <main class="main-container">
         <h1 class="page-title"><%= title %></h1>
-
         <ul class="card-grid">
-            <li class="card text-card">Environmental</li>
-            <li class="card text-card">Educational</li>
-            <li class="card text-card">Community Service</li>
-            <li class="card text-card">Health and Wellness</li>
+            <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(category => { %>
+            <li class="card text-card"><%= category.name %></li>
+            <% }); %>
+            <% } 
+            else { %>
+            <li class="card text-card">No categories found</li>
+            <% } %>
         </ul>
     </main>
 <%- include('partials/footer') %>
