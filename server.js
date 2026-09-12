@@ -61,12 +61,11 @@ app.get('/projects', async (req, res) => {
 
 app.get('/categories', async (req, res) => {
     try {
-    const categories = await getAllCategories();
-      res.render('categories', {
-      title: 'Categories',
-      categories: categories
-    });
-  } catch (error) {
+      const categories = await getAllCategories();
+      const title = 'Categories';
+      res.render('categories', { title, categories });
+    } 
+    catch (error) {
     console.error('Error fetching categories:', error);
     res.status(500).send('Internal Server Error');
   }
