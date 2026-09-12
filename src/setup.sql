@@ -157,3 +157,7 @@ JOIN project_categories pc ON p.project_id = pc.project_id
 JOIN categories c ON pc.category_id = c.category_id
 GROUP BY p.project_id, p.title, o.name
 ORDER BY p.project_id;
+
+SELECT category_id, name 
+        FROM categories 
+        ORDER BY name ASC;
