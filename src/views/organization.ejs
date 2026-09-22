@@ -1,0 +1,16 @@
+<%- include('partials/header') %>
+<main class="main-container">
+    <h1 class="page-title"><%= title %></h1>
+    <h2 class="org-title"><%= organizationDetails.name %></h2>
+    <img class="org-logo" src="/images/<%= organizationDetails.logo_filename %>" alt="<%= organizationDetails.name %> logo">
+
+    <p class="section-intro">Description: <%= organizationDetails.description %></p>
+
+    <h3>Service Projects</h3>
+    <ul class="card-grid">
+        <% projects.forEach(project => { %>
+            <li><a href="/project/<%= project.project_id %>"><%= project.title %></a></li>
+        <% }) %>
+    </ul>
+</main>
+<%- include('partials/footer') %>

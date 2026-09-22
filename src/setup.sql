@@ -161,3 +161,21 @@ ORDER BY p.project_id;
 SELECT category_id, name 
         FROM categories 
         ORDER BY name ASC;
+
+-- create first 5 projects query
+
+
+SELECT 
+        p.project_id,
+        p.title,
+        p.description,
+        p.project_date AS date,
+        p.proj_location AS location,
+        p.organization_id,
+        o.name AS organization_name
+      FROM service_projects p
+      JOIN organization o ON p.organization_id = o.organization_id
+      WHERE p.project_date >= CURRENT_DATE
+      ORDER BY p.project_date ASC
+      LIMIT 5
+	  

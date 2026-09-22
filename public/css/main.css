@@ -4,7 +4,7 @@
   --secondary-color: #1e293b;
   --accent-color: #2563eb;
   --background-color: #f8fafc;
-  --card-bg: #ffffff;
+  --card-bg: #f8fafc;
   --text-primary: #1e293b;
   --text-muted: #64748b;
   --border-color: #e2e8f0;
@@ -226,6 +226,41 @@ body {
   font-size: 0.9rem;
   color: var(--text-muted);
   word-break: break-all;
+}
+/* Project Details Page Styles */
+.project-detail-wrapper {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    max-width: 800px;
+}
+.project-detail-wrapper h2 {
+    margin-top: 0;
+    color: #1a202c;
+}
+.project-meta-info {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    border-left: 4px solid #2b6cb0;
+}
+.project-meta-info p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+}
+.project-divider {
+    border: 0;
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 1.5rem 0;
+}
+.project-description {
+    line-height: 1.6;
+    color: #4a5568;
 }
 /*footer*/
 .main-footer {
