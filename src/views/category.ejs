@@ -3,15 +3,18 @@
 <h1><%= title %></h1>
     <% if (projects && projects.length > 0) { %>
     <ul class="project-list">
-        <% projects.forEach(project => { %>
-            <li>
-                <a href="/project/<%= project.project_id %>">
-                    <strong><%= project.project_title %></strong>
-                </a>
-                <br>
-                <span><%= project.organization_name %> | <%= new Date(project.date).toLocaleDateString() %></span>
-            </li>
-        <% }) %>
+    <% projects.forEach(project => { %>
+        <li class="project-item">
+            <a href="/project/<%= project.project_id %>" class="project-title-link">
+                <%= project.project_title %>
+            </a>
+            <div class="project-meta">
+                <span class="project-org"><%= project.organization_name %></span>
+                <span class="meta-divider">•</span>
+                <span class="project-date"><%= new Date(project.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></span>
+            </div>
+        </li>
+    <% }) %>
     </ul>
     <% } 
     else { %>

@@ -262,6 +262,54 @@ body {
     line-height: 1.6;
     color: #4a5568;
 }
+/*project details*/
+.project-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.project-item {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+/*hover effect for project items to give a subtle lift and shadow on hover, enhancing the visual feedback for users.*/
+.project-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.project-title-link {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #002244;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+.project-title-link:hover {
+    text-decoration: underline;
+    color: #004080;
+}
+.project-meta {
+    font-size: 0.9rem;
+    color: #555555;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.project-org {
+    font-weight: 500;
+}
+.meta-divider {
+    color: #cccccc;
+    font-size: 1.1rem;
+}
 /*footer*/
 .main-footer {
   text-align: center;
@@ -324,4 +372,20 @@ body {
   .page-title {
     font-size: 2.25rem;
   }
+  /*category desktop*/
+  .project-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+    }
+    .project-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 100%;
+    }
+    .project-meta {
+        margin-top: auto;
+        padding-top: 12px;
+    }
 }
