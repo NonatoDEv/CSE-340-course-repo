@@ -161,9 +161,33 @@ ORDER BY p.project_id;
 SELECT category_id, name 
         FROM categories 
         ORDER BY name ASC;
+--organization
+--getOrganizationDetailsPage
 
--- create first 5 projects query
+SELECT
+	organization_id,
+    name,
+    description,
+    contact_email,
+    logo_filename
+    FROM organization
+    WHERE organization_id = $1
 
+--getProjectsByOrganizationId
+
+SELECT
+	project_id,
+    organization_id,
+    title,
+    description,
+    proj_location AS location,
+    project_date AS date
+    FROM service_projects
+    WHERE organization_id = $1
+    ORDER BY project_date ASC;
+
+-- project
+--getUpcomingProjects
 
 SELECT 
         p.project_id,
@@ -178,4 +202,17 @@ SELECT
       WHERE p.project_date >= CURRENT_DATE
       ORDER BY p.project_date ASC
       LIMIT 5
-	  
+
+--getProjectDetails
+
+SELECT 
+	p.project_id,
+    p.title AS project_title,
+    p.description,
+    p.project_date AS date,
+    p.proj_location AS location,
+    p.organization_id,
+    o.name AS organization_name
+    FROM service_projects p
+    JOIN organization o ON p.organization_id = o.organization_id
+    WHERE p.project_id = $1

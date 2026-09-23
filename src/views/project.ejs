@@ -2,7 +2,7 @@
     <main class="main-container">
         <h1 class="page-title"><%= title %></h1>
         <div class="project-detail-wrapper">
-            <h2><%= project.title %></h2>
+            <h2><%= project.title || project.project_title %></h2>
             <div class="project-meta-info">
                 <p><strong>Date:</strong> <%= new Date(project.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
                 <p><strong>Location:</strong> <%= project.location %></p>
@@ -10,6 +10,15 @@
                     <a href="/organization/<%= project.organization_id %>">
                         <%= project.organization_name %>
                     </a>
+                </p>
+                <p><strong>Categories:</strong> 
+                    <% if (categories && categories.length > 0) { %>
+                        <% categories.forEach((category, index) => { %>
+                            <a href="/category/<%= category.category_id %>"><%= category.name %></a><%= index < categories.length - 1 ? ', ' : '' %>
+                        <% }); %>
+                    <% } else { %>
+                        <span>No categories assigned</span>
+                    <% } %>
                 </p>
             </div>
             <hr class="project-divider">

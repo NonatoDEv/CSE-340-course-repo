@@ -1,0 +1,21 @@
+<%- include('partials/header') %> <!-- Ajusta la ruta de tus partials si los usas -->
+
+<h1><%= title %></h1>
+    <% if (projects && projects.length > 0) { %>
+    <ul class="project-list">
+        <% projects.forEach(project => { %>
+            <li>
+                <a href="/project/<%= project.project_id %>">
+                    <strong><%= project.project_title %></strong>
+                </a>
+                <br>
+                <span><%= project.organization_name %> | <%= new Date(project.date).toLocaleDateString() %></span>
+            </li>
+        <% }) %>
+    </ul>
+    <% } 
+    else { %>
+    <p>we don't have any projects for this category.</p>
+<% } %>
+
+<%- include('partials/footer') %>
