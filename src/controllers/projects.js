@@ -1,7 +1,5 @@
 import { getAllProjects } from '../models/projects.js';
-import { getAllCategories } from '../models/categories.js';
 import { getUpcomingProjects } from '../models/projects.js';
-
 import { getCategoriesByProjectId } from '../models/categories.js';
 import { createNewProject } from '../models/projects.js';
 import { getAllOrganizations } from '../models/organizations.js';
