@@ -15,7 +15,7 @@ import { organizationValidation } from './controllers/organizations.js';
 import { showNewProjectForm } from './controllers/projects.js';
 import { processNewProjectForm } from './controllers/projects.js';
 import { projectValidation } from './controllers/projects.js';
-import { showAssignCategoriesForm, processAssignCategoriesForm } from './controllers/projects.js';
+import { showAssignCategoriesForm, processAssignCategoriesForm } from './controllers/categories.js';
 
 const router = express.Router();
 

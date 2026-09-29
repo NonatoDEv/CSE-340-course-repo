@@ -1,12 +1,11 @@
 import { getAllProjects } from '../models/projects.js';
 import { getAllCategories } from '../models/categories.js';
 import { getUpcomingProjects } from '../models/projects.js';
-import { getProjectDetails } from '../models/projects.js';
+
 import { getCategoriesByProjectId } from '../models/categories.js';
 import { createNewProject } from '../models/projects.js';
 import { getAllOrganizations } from '../models/organizations.js';
 import { body, validationResult } from 'express-validator';
-import { updateCategoryAssignments } from '../models/projects.js';
 
 const NUMBER_OF_UPCOMING_PROJECTS = 5;
 
@@ -102,28 +101,3 @@ const processNewProjectForm = async (req, res) => {
 }
 export {projectValidation}
 export { processNewProjectForm };
-
-const showAssignCategoriesForm = async (req, res) => {
-    const projectId = req.params.projectId;
-
-    const projectDetails = await getProjectDetails(projectId);
-    const categories = await getAllCategories();
-    const assignedCategories = await getCategoriesByProjectId(projectId);
-
-    const title = 'Assign Categories to Project';
-
-    res.render('assign-categories', { title, projectId, projectDetails, categories, assignedCategories });
-};
-
-const processAssignCategoriesForm = async (req, res) => {
-    const projectId = req.params.projectId;
-    const selectedCategoryIds = req.body.categoryIds || [];
-    
-    // Ensure selectedCategoryIds is an array
-    const categoryIdsArray = Array.isArray(selectedCategoryIds) ? selectedCategoryIds : [selectedCategoryIds];
-    await updateCategoryAssignments(projectId, categoryIdsArray);
-    req.flash('success', 'Categories updated successfully.');
-    res.redirect(`/project/${projectId}`);
-};
-
-export{ showAssignCategoriesForm, processAssignCategoriesForm}
