@@ -102,3 +102,48 @@ const getProjectsByCategoryId = async(categoryId) => {
 }
 
 export { getProjectsByCategoryId };
+
+const createNewProject = async(title, description, location, date, organizationId) => {
+    const query = `
+        INSERT INTO service_projects (title, description, location, date, organization_id)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING project_id;
+    `;
+    const queryParams = [title, description, location, date, organizationId];
+    const result = await db.query(query, queryParams);
+
+    if (result.rows.length === 0){
+        throw new Error('Failed to create new project');
+    }
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+        console.log(`New project created with ID: `, result.rows[0].project_id);
+    }
+    return result.rows[0].project_id;
+} 
+
+export{ createNewProject };
+
+const assignCategoryToProject = async(categoryId, project_id) =>{
+    const query = `
+        INSERT INTO project_category (category_id, project_id)
+        VALUES ($1, $2);
+    `;
+
+    await db.query(query, [categoryId, project_id]);
+}
+
+const updateCategoryAssignments = async(project_id, categoryId) =>{
+    // First, remove existing category assignments for the project
+    const deleteQuery = `
+        DELETE FROM project_category
+        WHERE project_id = $1;
+    `;
+    await db.query(deleteQuery, [projectId]);
+
+    // Next, add the new category assignments
+    for (const categoryId of categoryIds) {
+        await assignCategoryToProject(categoryId, projectId);
+    }
+}
+
+export{ updateCategoryAssignments}
