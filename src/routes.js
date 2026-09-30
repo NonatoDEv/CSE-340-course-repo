@@ -17,7 +17,7 @@ import { processNewProjectForm } from './controllers/projects.js';
 import { projectValidation } from './controllers/projects.js';
 import { showAssignCategoriesForm, processAssignCategoriesForm } from './controllers/categories.js';
 import { showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
-import { showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm } from './controllers/categories.js';
+import { categoryValidation, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm } from './controllers/categories.js';
 
 const router = express.Router();
 
@@ -47,10 +47,10 @@ router.get('/edit-project/:id', showEditProjectForm);
 router.post('/edit-project/:id', processEditProjectForm);
 // Routes to handle new categories created
 router.get('/new-category', showNewCategoryForm);
-router.post('/new-category', processNewCategoryForm);
+router.post('/new-category', categoryValidation, processNewCategoryForm);
 //Routes to handle the update categories
 router.get('/edit-category/:id', showEditCategoryForm);
-router.post('/edit-category/:id', processEditCategoryForm);
+router.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
 
 
 // error-handling routes

@@ -6,7 +6,17 @@ import {updateCategoryAssignments} from '../models/categories.js'
 import{ getCategoriesByProjectId} from '../models/categories.js'
 import { insertCategory } from '../models/categories.js';
 import { updateCategory } from '../models/categories.js';
+import { body, validationResult } from 'express-validator';
 
+
+const categoryValidation = [
+    body('name')
+        .trim()
+        .notEmpty().withMessage('Category name is required.')
+        .isLength({ min: 3, max: 100 }).withMessage('Category name must be between 3 and 100 characters.')
+];
+
+export{categoryValidation}
 
 const showCategoriesPage = async (req, res) => {
     try {
