@@ -1,6 +1,7 @@
 <%- include('partials/header') %>
 
 <h1><%= title %></h1>
+    <a href="/new-category">Add a New Category</a>
     <% if (projects && projects.length > 0) { %>
     <ul class="project-list">
     <% projects.forEach(project => { %>
@@ -16,7 +17,6 @@
         </li>
     <% }) %>
     </ul>
-    <a href="/new-category">Add a New Category</a>
     <% } 
     else { %>
     <p>we don't have any projects for this category.</p>
