@@ -123,3 +123,23 @@ const createNewProject = async(title, description, location, date, organizationI
 
 export{ createNewProject };
 
+const updateProject = async(project_id, projectData) => {
+    const{title, description, date, organizationId} = projectData
+    
+    const query =  `
+        UPDATE project
+        SET 
+            title = $1
+            description =$2
+            date = $3
+            organizationId = $4
+        WHERE project_id = $5
+        returning *;  
+    `;
+    if (result.rowCount === 0){
+        throw new error('project not found or could not be updated')
+    }
+    return result.rows[0]
+};
+
+export {updateProject}

@@ -1,9 +1,10 @@
-import { getAllProjects } from '../models/projects.js';
+import { getAllProjects, getProjectDetails } from '../models/projects.js';
+import { getAllOrganizations } from '../models/organizations.js';
 import { getUpcomingProjects } from '../models/projects.js';
 import { getCategoriesByProjectId } from '../models/categories.js';
 import { createNewProject } from '../models/projects.js';
-import { getAllOrganizations } from '../models/organizations.js';
 import { body, validationResult } from 'express-validator';
+import { updateProject } from '../models/projects.js';
 
 const NUMBER_OF_UPCOMING_PROJECTS = 5;
 
@@ -44,6 +45,7 @@ const showProjectsPage = async (req, res) => {
 export { showProjectsPage };
 
 const showProjectDetailsPage = async (req, res) => {
+    console.log(project);
     try{
         const projectId = req.params.id;
         const project = await getProjectDetails(projectId);
@@ -99,3 +101,47 @@ const processNewProjectForm = async (req, res) => {
 }
 export {projectValidation}
 export { processNewProjectForm };
+
+const showEditProjectForm = async(req, res, next) => {
+    try{
+        const projectId = req.params.id;
+        const project = await getProjectDetails(projectId);
+        const organizations = await getAllOrganizations();
+
+        if (project && project.date){
+            project.formatted_date = new Date (project.date).toISOString().split('T')[0];
+        }
+
+        res.render('update-project',{
+            title: 'Edit Service Project',
+            project: project,
+            organizations: organizations
+        });
+    }
+    catch(error){
+        next(error)
+    }
+};
+
+const processEditProjectForm = async (req, res, next) => {
+    try{
+        const projectId = req.params.id;
+        const {title, description, date, organizationId} = req.body
+        await updateProject (projectId, {
+            title,
+            description,
+            date,
+            organizationId
+
+        });
+
+        req.flash('Success','Project updated Successfully');
+        res.direct('/project/${projectId}');
+
+    }
+    catch(error){
+        next(error)
+    }
+}
+
+export{showEditProjectForm, processEditProjectForm}
