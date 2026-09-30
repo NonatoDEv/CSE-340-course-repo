@@ -4,6 +4,8 @@ import { getProjectsByCategoryId } from '../models/projects.js';
 import { getProjectDetails } from '../models/projects.js';
 import {updateCategoryAssignments} from '../models/categories.js'
 import{ getCategoriesByProjectId} from '../models/categories.js'
+import { insertCategory } from '../models/categories.js';
+import { updateCategory } from '../models/categories.js';
 
 
 const showCategoriesPage = async (req, res) => {
@@ -61,3 +63,71 @@ const processAssignCategoriesForm = async (req, res) => {
 };
 
 export{ showAssignCategoriesForm, processAssignCategoriesForm}
+
+const showNewCategoryForm = (req, res) => {
+    res.render('new-category', { 
+        title: 'Create New Category', 
+        categoryName: '', 
+        error: null 
+    });
+};
+
+const processNewCategoryForm = async (req, res, next) => {
+    try {
+        const categoryName = req.body.name || '';
+
+        if (!categoryName || categoryName.length < 3 || categoryName.length > 100) {
+            return res.render('new-category', {
+                title: 'Create New Category',
+                categoryName: categoryName,
+                error: 'Category name must be between 3 and 100 characters long.'
+            });
+        }
+
+        await insertCategory(categoryName);
+        req.flash('success', 'Category created successfully.');
+        res.redirect('/categories/${categoryId}');
+    } catch (error) {
+        next(error);
+    }
+};
+
+export{ showNewCategoryForm, processNewCategoryForm}
+
+const showEditCategoryForm = async (req, res, next) => {
+    try {
+        const categoryId = req.params.id;
+        const category = await getCategoryById(categoryId);
+
+        res.render('edit-category', { 
+            title: 'Edit Category', 
+            category: category, 
+            error: null 
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const processEditCategoryForm = async (req, res, next) => {
+    try {
+        const categoryId = req.params.id;
+        const categoryName = req.body.name || '';
+
+        if (!categoryName || categoryName.length < 3 || categoryName.length > 100) {
+            return res.render('edit-category', {
+                title: 'Edit Category',
+                category: { category_id: categoryId, name: categoryName },
+                error: 'Category name must be between 3 and 100 characters long.'
+            });
+        }
+
+        await updateCategory(categoryId, categoryName);
+        req.flash('success', 'Category updated successfully.');
+        res.redirect('/categories/${categoryId}');
+    } catch (error) {
+        next(error);
+    }
+};
+
+export{showEditCategoryForm, processEditCategoryForm}

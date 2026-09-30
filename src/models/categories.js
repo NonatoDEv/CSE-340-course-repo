@@ -81,3 +81,22 @@ const updateCategoryAssignments = async(project_id, categoryId) =>{
 }
 
 export{ updateCategoryAssignments}
+
+const insertCategory = async (categoryName) => {
+    const query = 'INSERT INTO category (name) VALUES ($1) RETURNING *';
+    const result = await db.query(query, [categoryName]);
+    return result.rows[0];
+};
+
+export {insertCategory}
+
+const updateCategory = async (categoryId, categoryName) => {
+    const query = 'UPDATE category SET name = $1 WHERE category_id = $2 RETURNING *';
+    const result = await db.query(query, [categoryName, categoryId]);
+    if (result.rowCount === 0) {
+        throw new Error('Category not found or could not be updated');
+    }
+    return result.rows[0];
+};
+
+export {updateCategory}

@@ -45,7 +45,6 @@ const showProjectsPage = async (req, res) => {
 export { showProjectsPage };
 
 const showProjectDetailsPage = async (req, res) => {
-    console.log(project);
     try{
         const projectId = req.params.id;
         const project = await getProjectDetails(projectId);
