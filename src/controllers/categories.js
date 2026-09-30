@@ -89,14 +89,14 @@ const processNewCategoryForm = async (req, res, next) => {
         if (!categoryName || categoryName.length < 3 || categoryName.length > 100) {
             return res.render('new-category', {
                 title: 'Create New Category',
-                categoryName: categoryName,
-                error: 'Category name must be between 3 and 100 characters long.'
+                categoryName: req.body.name,
+                error: errors.array()[0].msg
             });
         }
 
         await insertCategory(categoryName);
         req.flash('success', 'Category created successfully.');
-        res.redirect('/categories/${categoryId}');
+        res.redirect('/categories');
     } catch (error) {
         next(error);
     }
@@ -127,14 +127,14 @@ const processEditCategoryForm = async (req, res, next) => {
         if (!categoryName || categoryName.length < 3 || categoryName.length > 100) {
             return res.render('edit-category', {
                 title: 'Edit Category',
-                category: { category_id: categoryId, name: categoryName },
-                error: 'Category name must be between 3 and 100 characters long.'
+                category: {category_id: categoryId, name: req.body.name ,Id, name: categoryName },
+                error: errors.array()[0].msg
             });
         }
 
         await updateCategory(categoryId, categoryName);
         req.flash('success', 'Category updated successfully.');
-        res.redirect('/categories/${categoryId}');
+        res.redirect('/categories');
     } catch (error) {
         next(error);
     }
