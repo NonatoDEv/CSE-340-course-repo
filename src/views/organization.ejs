@@ -13,7 +13,9 @@
         <% }) %>
     </ul>
     <div class="organization-actions" style="margin-top: 15px;">
-    <a href="/edit-organization/<%= organization.organization_id %>" class="btn-primary">Edit Organization</a>
-</div>
+        <button class="btn btn-primary">
+            <a href="/update-organization/<%= organizationDetails.organization_id %>" style="color: white; text-decoration: none;">Edit Organization</a>
+        </button>
+    </div>
 </main>
 <%- include('partials/footer') %>

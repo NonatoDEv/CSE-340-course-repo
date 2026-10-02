@@ -22,7 +22,7 @@
                 </p>
             </div>
             <div class="category-management" style="margin-top: 15px;">
-                <a href="/assign-categories/<%= project.project_id || project.id %>" class="btn-primary">Manage Categories</a>
+                <a href="/assign-categories/<%= project.project_id || project.id %>" class="btn-primary" style="text-decoration: none;">Manage Categories</a>
             </div>
             <hr class="project-divider">
             <div class="project-description">
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="project-actions" style="margin-top: 15px;">
-            <a href="/edit-project/<%= project.project_id || project.id %>" class="btn-primary">Edit Project</a>
+            <a href="/edit-project/<%= project.project_id || project.id %>" class="btn-primary" style="text-decoration: none;">Edit Project</a>
         </div>
     </main>
 <%- include('partials/footer') %>

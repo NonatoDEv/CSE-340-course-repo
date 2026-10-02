@@ -93,12 +93,11 @@ const processNewOrganizationForm = async (req, res) => {
 const showEditOrganizationForm = async (req, res, next) => {
     try {
         const organizationId = req.params.id;
-        // Asume que ya tienes una función getOrganizationById en tu modelo
-        const organization = await getOrganizationById(organizationId); 
+        const organizationData = await getOrganizationDetailsPage(organizationId);
 
         res.render('update-organization', {
             title: 'Edit Organization',
-            organization: organization
+            organization: organizationData
         });
     } catch (error) {
         console.error("Error cargando el formulario de edición de organización:", error);
@@ -115,7 +114,7 @@ const processEditOrganizationForm = async (req, res, next) => {
         errors.array().forEach((error) => {
             req.flash('error', error.msg);
         });
-        return res.redirect(`/edit-organization/${organizationId}`);
+        return res.redirect(`/update-organization/${organizationId}`);
     }
 
     try {
@@ -129,7 +128,7 @@ const processEditOrganizationForm = async (req, res, next) => {
     } catch (error) {
         console.error("Error al actualizar organización en DB:", error);
         req.flash('error', 'Database error updating the organization.');
-        return res.redirect(`/edit-organization/${organizationId}`);
+        return res.redirect(`/update-organization/${organizationId}`);
     }
 };
 

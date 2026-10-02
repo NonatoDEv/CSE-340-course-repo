@@ -3,7 +3,7 @@
 <main class="main-container">
     <h1 class="page-title"><%= title %></h1>
 
-    <form action="/edit-organization/<%= organization.organization_id %>" method="POST" class="form-container">
+    <form action="/update-organization/<%= organization.organization_id %>" method="POST" class="form-container">
         
         <div class="form-group">
             <label for="name">Organization Name</label>
@@ -39,7 +39,8 @@
         </div>
 
         <button type="submit" class="btn-primary">Update Organization</button>
-        <a href="/organization/<%= organization.organization_id %>" style="margin-left: 15px; text-decoration: none;">Cancel</a>
+        <a href="/organization/<%= organization.organization_id %>" class="btn btn-secondary" style="margin-left: 15px; text-decoration: none;">Cancel</a>
+        
     </form>
 
 </main>
