@@ -1,7 +1,7 @@
 import { getAllProjects, getProjectDetails } from '../models/projects.js';
 import { getAllOrganizations } from '../models/organizations.js';
 import { getUpcomingProjects } from '../models/projects.js';
-import { getCategoriesByProjectId } from '../models/categories.js';
+import { getAllCategories, getCategoriesByProjectId } from '../models/categories.js';
 import { createNewProject } from '../models/projects.js';
 import { body, validationResult } from 'express-validator';
 import { updateProject } from '../models/projects.js';
@@ -52,10 +52,11 @@ const showProjectDetailsPage = async (req, res) => {
         if (!project) {
             return res.status(404).send(`<h1>Error 404</h1><p>No se encontró ningún proyecto con el ID: ${projectId}</p>`);
         }
+        const allCategories = await getAllCategories();
         const categories = await getCategoriesByProjectId(projectId);
         const title = 'Project Details';
 
-        res.render('project', { title, project, categories });
+        res.render('project', { title, project, categories, allCategories});
     }
     catch(error) {
         console.error('Error fetching project details:', error);
@@ -77,25 +78,31 @@ const showNewProjectForm = async (req, res) => {
 export { showNewProjectForm };
 
 const processNewProjectForm = async (req, res) => {
+    console.log("=== FORM NEW PROJECT ===");
+    console.log(req.body);
+    console.log("========================================");
+    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        errors.array().forEach((error)=>{
+            req.flash('error', error.msg);
+        });
+        return res.redirect('/new-project');
+    }
+    
     const {title, description, location, date, organizationId} = req.body;
     
     try{
         const newProjectId = await createNewProject(title, description, location, date, organizationId);
         req.flash('success', 'New Service project created successfully!');
         
-        req.redirect(`/project/${newProjectId}`);
+        res.redirect(`/project/${newProjectId}`);
     }
-    catch(error){
-        // Check for validation errors
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-        // Loop through validation errors and flash them
-        errors.array().forEach((error) => {
-            req.flash('error', error.msg);
-        });
-        // Redirect back to the new project form
-        return res.redirect('/new-project');
-        }
+    catch (error) {
+        console.error("Error to create in the DB:", error);
+        
+        req.flash('error', 'Sorry, there was a database error creating the project.');
+        return res.redirect('/new-project'); 
     }
 }
 export {projectValidation}
@@ -123,23 +130,31 @@ const showEditProjectForm = async(req, res, next) => {
 };
 
 const processEditProjectForm = async (req, res, next) => {
+    const projectId = req.params.id;
+
+    console.log("=== DATA FROM FORM EDIT PROJECT ===");
+    console.log("Project ID URL:", req.params.id);
+    console.log("data from body:", req.body);
+    console.log("=========================================");
     try{
-        const projectId = req.params.id;
-        const {title, description, date, organizationId} = req.body
+        
+        const {title, description, location, date, organizationId} = req.body
         await updateProject (projectId, {
             title,
             description,
+            location,
             date,
             organizationId
-
         });
 
-        req.flash('Success','Project updated Successfully');
-        res.direct('/project/${projectId}');
+        req.flash('success','Project updated Successfully');
+        res.redirect(`/project/${projectId}`);
 
     }
     catch(error){
-        next(error)
+        console.error("Error actualizando en DB:", error.message);
+        req.flash('error', 'Error updating the project.');
+        return res.redirect(`/edit-projects/${projectId}`);
     }
 }
 

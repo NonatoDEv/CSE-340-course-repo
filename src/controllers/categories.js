@@ -50,26 +50,50 @@ const showCategoryDetailsPage = async (req, res) => {
 export { showCategoryDetailsPage }; 
 
 const showAssignCategoriesForm = async (req, res) => {
-    const projectId = req.params.projectId;
+    try{
+        const projectId = req.params.projectId;
 
-    const projectDetails = await getProjectDetails(projectId);
-    const categories = await getAllCategories();
-    const assignedCategories = await getCategoriesByProjectId(projectId);
+        const projectDetails = await getProjectDetails(projectId);
+        const categories = await getAllCategories();
+        const assignedCategories = await getCategoriesByProjectId(projectId);
 
-    const title = 'Assign Categories to Project';
+        const title = 'Assign Categories to Project';
 
-    res.render('assign-categories', { title, projectId, projectDetails, categories, assignedCategories });
-};
+        res.render('assign-categories', {
+            title, 
+            projectId, 
+            projectDetails, 
+            categories, 
+            assignedCategories 
+        });
+        }
+        catch{
+            next(error);
+        }
+    }
 
 const processAssignCategoriesForm = async (req, res) => {
-    const projectId = req.params.projectId;
-    const selectedCategoryIds = req.body.categoryIds || [];
+    console.log("=== DATA FROM CATEGORIES ASSIGN ===");
+    console.log("Project ID:", req.params.projectId);
+    console.log("Checkboxes:", req.body.categoryIds);
+    console.log("========================================");
     
-    // Ensure selectedCategoryIds is an array
-    const categoryIdsArray = Array.isArray(selectedCategoryIds) ? selectedCategoryIds : [selectedCategoryIds];
-    await updateCategoryAssignments(projectId, categoryIdsArray);
-    req.flash('success', 'Categories updated successfully.');
-    res.redirect(`/project/${projectId}`);
+    try {
+        const projectId = req.params.projectId;
+        const selectedCategoryIds = req.body.categoryIds || [];
+        
+        // Ensure selectedCategoryIds is an array
+        const categoryIdsArray = Array.isArray(selectedCategoryIds) ? selectedCategoryIds : [selectedCategoryIds];
+        
+        await updateCategoryAssignments(projectId, categoryIdsArray);
+        
+        req.flash('success', 'Categories updated successfully.');
+        return res.redirect(`/project/${projectId}`);
+    } catch (error) {
+        console.error("Error al guardar las categorías en la DB:", error);
+        req.flash('error', 'Database error updating categories.');
+        return res.redirect(`/project/${req.params.projectId}`);
+    }
 };
 
 export{ showAssignCategoriesForm, processAssignCategoriesForm}
@@ -120,6 +144,10 @@ const showEditCategoryForm = async (req, res, next) => {
 };
 
 const processEditCategoryForm = async (req, res, next) => {
+    console.log("=== DATA FROM FORM EDIT CATEGORY ===");
+    console.log("URL id:", req.params.id);
+    console.log("REQUEST BODY:", req.body);
+    console.log("==========================================");
     try {
         const categoryId = req.params.id;
         const categoryName = req.body.name || '';
@@ -127,8 +155,8 @@ const processEditCategoryForm = async (req, res, next) => {
         if (!categoryName || categoryName.length < 3 || categoryName.length > 100) {
             return res.render('edit-category', {
                 title: 'Edit Category',
-                category: {category_id: categoryId, name: req.body.name ,Id, name: categoryName },
-                error: errors.array()[0].msg
+                category: {category_id: categoryId, name: categoryName },
+                error: 'Category name must be between 3 and 100 characters.'
             });
         }
 
@@ -136,7 +164,12 @@ const processEditCategoryForm = async (req, res, next) => {
         req.flash('success', 'Category updated successfully.');
         res.redirect('/categories');
     } catch (error) {
-        next(error);
+        
+        return res.render('edit-category', {
+            title: 'Edit Category',
+            category: { category_id: req.params.id, name: req.body.name },
+            error: 'A database error occurred while updating the category.'
+        });
     }
 };
 

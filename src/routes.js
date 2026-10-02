@@ -3,7 +3,7 @@ import express from 'express';
 import { showHomePage } from './controllers/index.js';
 import { showOrganizationsPage } from './controllers/organizations.js';
 import { showOrganizationDetailsPage,  } from './controllers/organizations.js';
-
+import { showEditOrganizationForm, processEditOrganizationForm } from './controllers/organizations.js';
 import { showProjectsPage } from './controllers/projects.js';
 import { showProjectDetailsPage } from './controllers/projects.js';
 import { showCategoriesPage } from './controllers/categories.js';
@@ -35,6 +35,9 @@ router.get('/category/:id', showCategoryDetailsPage);
 router.get('/new-organization', showNewOrganizationForm);
 // Route to handle new organization form submission
 router.post('/new-organization',organizationValidation ,processNewOrganizationForm)
+//Route to update organization details form submission
+router.get('/edit-organization/:id', showEditOrganizationForm);
+router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
 //Route for new project page
 router.get('/new-project', showNewProjectForm);
 //Route to handle new project form submission

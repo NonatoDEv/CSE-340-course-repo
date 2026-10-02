@@ -1,6 +1,7 @@
 import { getAllOrganizations, getOrganizationDetailsPage, getProjectsByOrganizationId } from '../models/organizations.js';
 import {createOrganization} from '../models/organizations.js';
 import { body, validationResult } from 'express-validator';
+import { updateOrganization, getOrganizationById} from '../models/organizations.js'; 
 
 // Define validation and sanitization rules for organization form
 // Define validation rules for organization form
@@ -60,7 +61,11 @@ const showNewOrganizationForm = async (req, res) => {
 }
 
 const processNewOrganizationForm = async (req, res) => {
-    // Check for validation errors
+    console.log("=== DATA FROM FORM NEW ORGANIZATION ===");
+    console.log(req.body);
+    console.log("=============================================");
+
+   // Check for validation errors
     const results = validationResult(req);
     if (!results.isEmpty()) {
         // Validation failed - loop through errors
@@ -69,15 +74,63 @@ const processNewOrganizationForm = async (req, res) => {
         });
         // Redirect back to the new organization form
         return res.redirect('/new-organization');
+        }
+    try{
+        const { name, description, contactEmail } = req.body;
+        const logoFilename = 'placeholder-logo.png'; // Use the placeholder logo for all new organizations    
+
+        const organizationId = await createOrganization(name, description, contactEmail, logoFilename);
+        req.flash('success', 'Organization added successfully!');
+        res.redirect(`/organization/${organizationId}`);
+        }
+    catch{
+        console.error("Error creando la organización en DB:", error);
+        req.flash('error', 'Error creating the organization in the database.');
+        return res.redirect('/new-organization');
     }
+    };
 
-    const { name, description, contactEmail } = req.body;
-    const logoFilename = 'placeholder-logo.png'; // Use the placeholder logo for all new organizations    
+const showEditOrganizationForm = async (req, res, next) => {
+    try {
+        const organizationId = req.params.id;
+        // Asume que ya tienes una función getOrganizationById en tu modelo
+        const organization = await getOrganizationById(organizationId); 
 
-    const organizationId = await createOrganization(name, description, contactEmail, logoFilename);
-    req.flash('success', 'Organization added successfully!');
-    res.redirect(`/organization/${organizationId}`);
+        res.render('update-organization', {
+            title: 'Edit Organization',
+            organization: organization
+        });
+    } catch (error) {
+        console.error("Error cargando el formulario de edición de organización:", error);
+        next(error);
+    }
 };
 
-export { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation };
+const processEditOrganizationForm = async (req, res, next) => {
+    const organizationId = req.params.id;
+    
+    // Validaciones del servidor requeridas por la rúbrica
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        errors.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
+        return res.redirect(`/edit-organization/${organizationId}`);
+    }
 
+    try {
+        const { name, description, contactEmail } = req.body;
+        
+        await updateOrganization(organizationId, name, description, contactEmail);
+        
+        req.flash('success', 'Organization updated successfully!');
+        return res.redirect(`/organization/${organizationId}`);
+
+    } catch (error) {
+        console.error("Error al actualizar organización en DB:", error);
+        req.flash('error', 'Database error updating the organization.');
+        return res.redirect(`/edit-organization/${organizationId}`);
+    }
+};
+
+export { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm };

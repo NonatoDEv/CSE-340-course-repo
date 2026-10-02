@@ -105,7 +105,7 @@ export { getProjectsByCategoryId };
 
 const createNewProject = async(title, description, location, date, organizationId) => {
     const query = `
-        INSERT INTO service_projects (title, description, location, date, organization_id)
+        INSERT INTO service_projects (title, description, proj_location, project_date, organization_id)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING project_id;
     `;
@@ -124,20 +124,24 @@ const createNewProject = async(title, description, location, date, organizationI
 export{ createNewProject };
 
 const updateProject = async(project_id, projectData) => {
-    const{title, description, date, organizationId} = projectData
+    const { title, description, location, date, organizationId } = projectData;
     
     const query =  `
-        UPDATE project
+        UPDATE service_projects
         SET 
-            title = $1
-            description =$2
-            date = $3
-            organizationId = $4
-        WHERE project_id = $5
-        returning *;  
+            title = $1,
+            description = $2,
+            proj_location = $3,
+            project_date = $4,
+            organization_id = $5
+        WHERE project_id = $6
+        RETURNING *;  
     `;
+
+    const result = await db.query(query, [title, description, location, date, organizationId, project_id]); 
+    
     if (result.rowCount === 0){
-        throw new error('project not found or could not be updated')
+        throw new Error('Project not found or could not be updated');
     }
     return result.rows[0]
 };
