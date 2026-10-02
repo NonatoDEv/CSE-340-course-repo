@@ -108,21 +108,22 @@ const showNewCategoryForm = (req, res) => {
 
 const processNewCategoryForm = async (req, res, next) => {
     try {
-        const categoryName = req.body.name || '';
+        const errors = validationResult(req);
 
-        if (!categoryName || categoryName.length < 3 || categoryName.length > 100) {
-            return res.render('new-category', {
-                title: 'Create New Category',
-                categoryName: req.body.name,
-                error: errors.array()[0].msg
+       if (!errors.isEmpty()) {
+            errors.array().forEach(error => {
+                req.flash('error', error.msg);
             });
+            return res.redirect('/new-category');
         }
 
+        const categoryName = req.body.name || '';
         await insertCategory(categoryName);
         req.flash('success', 'Category created successfully.');
         res.redirect('/categories');
     } catch (error) {
-        next(error);
+        req.flash('error', 'Database error creating the category.');
+        return res.redirect('/new-category');
     }
 };
 
@@ -150,26 +151,22 @@ const processEditCategoryForm = async (req, res, next) => {
     console.log("==========================================");
     try {
         const categoryId = req.params.id;
-        const categoryName = req.body.name || '';
+        const errors = validationResult(req);
 
-        if (!categoryName || categoryName.length < 3 || categoryName.length > 100) {
-            return res.render('edit-category', {
-                title: 'Edit Category',
-                category: {category_id: categoryId, name: categoryName },
-                error: 'Category name must be between 3 and 100 characters.'
+        if (!errors.isEmpty()) {
+            errors.array().forEach(error => {
+                req.flash('error', error.msg);
             });
+            return res.redirect(`/edit-category/${categoryId}`);
         }
-
+        const categoryName = req.body.name || '';
         await updateCategory(categoryId, categoryName);
         req.flash('success', 'Category updated successfully.');
         res.redirect('/categories');
-    } catch (error) {
-        
-        return res.render('edit-category', {
-            title: 'Edit Category',
-            category: { category_id: req.params.id, name: req.body.name },
-            error: 'A database error occurred while updating the category.'
-        });
+    } 
+    catch (error) {
+        req.flash('error', 'A database error occurred while updating the category.');
+        return res.redirect(`/edit-category/${req.params.id}`);
     }
 };
 

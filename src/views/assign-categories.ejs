@@ -2,7 +2,7 @@
 <main>
     <h1><%= projectDetails.title %></h1>
     <h2>Assign Categories</h2>
-        <form action="/assign-categories/<%= projectId %>" method="POST" class="form-container">
+    <form action="/assign-categories/<%= projectId %>" method="POST" class="form-container">
         <div class="form-group">
         <% categories.forEach(category => { %>
             <div>
@@ -17,7 +17,8 @@
             </div>
         <% }); %>
         </div>
-
-    <button type="submit" class="btn btn-primary">Update Categories</button>
-    <a href="/project/<%= projectId %>" class="btn btn-secondary" style="margin-left: 15px; text-decoration: none;">Cancel</a>
+        <button type="submit" class="btn btn-primary">Update Categories</button>
+        <a href="/project/<%= projectId %>" class="btn btn-secondary" style="margin-left: 15px; text-decoration: none;">Cancel</a>
+    </form>
+    
 <%- include('partials/footer') %>
