@@ -17,8 +17,10 @@
             </div>
         <% }); %>
         </div>
+        <% if (user && user.role_name === 'admin') { %>
         <button type="submit" class="btn btn-primary">Update Categories</button>
         <a href="/project/<%= projectId %>" class="btn btn-secondary" style="margin-left: 15px; text-decoration: none;">Cancel</a>
+        <% } %>
     </form>
     
 <%- include('partials/footer') %>

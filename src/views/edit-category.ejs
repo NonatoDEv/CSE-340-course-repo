@@ -16,9 +16,10 @@
         required 
       />
     </div>
-
+    <% if (user && user.role_name === 'admin') { %>
     <button type="submit" class="btn btn-primary">Update Category</button>
     <a href="/categories" class="btn btn-secondary">Cancel</a>
+    <% } %>
   </form>
 </main>
 

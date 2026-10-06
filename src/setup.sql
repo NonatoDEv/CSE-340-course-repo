@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS project_categories CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS service_projects CASCADE;
 DROP TABLE IF EXISTS organization CASCADE;
+DROP TABLE IF EXISTS roles CASCADE;
 
 -- ========================================
 -- Organization Table
@@ -161,58 +162,40 @@ ORDER BY p.project_id;
 SELECT category_id, name 
         FROM categories 
         ORDER BY name ASC;
---organization
---getOrganizationDetailsPage
 
-SELECT
-	organization_id,
-    name,
-    description,
-    contact_email,
-    logo_filename
-    FROM organization
-    WHERE organization_id = $1
+--CREATE OF USER'S ROLES TABLE
+CREATE TABLE roles (
+	role_id SERIAL PRIMARY KEY,
+	role_name VARCHAR(50) UNIQUE NOT NULL,
+	role_description TEXT
+);
 
---getProjectsByOrganizationId
+--POPULATED TABLE
+INSERT INTO roles (role_name, role_description) VALUES 
+    ('user', 'Standard user with basic access'),
+    ('admin', 'Administrator with full system access');
 
-SELECT
-	project_id,
-    organization_id,
-    title,
-    description,
-    proj_location AS location,
-    project_date AS date
-    FROM service_projects
-    WHERE organization_id = $1
-    ORDER BY project_date ASC;
+-- Verify the data was inserted
+SELECT * FROM roles;
 
--- project
---getUpcomingProjects
+-- CREATE OF USER'S TABLE
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id INTEGER REFERENCES roles(role_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-SELECT 
-        p.project_id,
-        p.title,
-        p.description,
-        p.project_date AS date,
-        p.proj_location AS location,
-        p.organization_id,
-        o.name AS organization_name
-      FROM service_projects p
-      JOIN organization o ON p.organization_id = o.organization_id
-      WHERE p.project_date >= CURRENT_DATE
-      ORDER BY p.project_date ASC
-      LIMIT 5
+-- Insert a test user
+INSERT INTO users (name, email, password_hash, role_id) 
+VALUES ('testuser', 'test@example.com', 'placeholder_hash', 1);
 
---getProjectDetails
+-- Join users and roles to see complete information
+SELECT u.user_id, u.name, u.email, r.role_name, r.role_description
+FROM users u
+JOIN roles r ON u.role_id = r.role_id;
 
-SELECT 
-	p.project_id,
-    p.title AS project_title,
-    p.description,
-    p.project_date AS date,
-    p.proj_location AS location,
-    p.organization_id,
-    o.name AS organization_name
-    FROM service_projects p
-    JOIN organization o ON p.organization_id = o.organization_id
-    WHERE p.project_id = $1
+-- Delete the test user
+DELETE FROM users WHERE email = 'test@example.com';

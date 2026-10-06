@@ -12,10 +12,10 @@
             <li><a href="/project/<%= project.project_id %>"><%= project.title %></a></li>
         <% }) %>
     </ul>
+    <% if (user && user.role_name === 'admin') { %>
     <div class="organization-actions" style="margin-top: 15px;">
-        <button class="btn btn-primary">
-            <a href="/update-organization/<%= organizationDetails.organization_id %>" style="color: white; text-decoration: none;">Edit Organization</a>
-        </button>
+        <a href="/update-organization/<%= organizationDetails.organization_id %>" class="btn btn-primary" style="text-decoration: none;">Edit Organization</a>
     </div>
+    <% } %>
 </main>
 <%- include('partials/footer') %>

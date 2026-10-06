@@ -13,10 +13,10 @@
                 </li>
             <% }); %>
         </ul>
-        <div class="organization-actions" style="margin-top: 15px; margin-bottom: 15px;">
-            <button class="btn btn-primary">
-                <a href="/new-organization" style="color: white; text-decoration: none;">Add a New Organization</a>
-            </button>
-        </div>    
+        <% if (user && user.role_name === 'admin') { %>
+        <div class="organization-actions" style="margin-top: 15px; margin-bottom: 15px;">            
+            <a href="/new-organization" class="btn btn-primary" style="text-decoration: none;">Add a New Organization</a>
+        </div>
+        <% } %> 
     </main>
 <%- include('partials/footer') %>

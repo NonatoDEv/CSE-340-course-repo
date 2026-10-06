@@ -13,8 +13,10 @@
             <li class="card text-card">No categories found</li>
             <% } %>
         </ul>
+        <% if (user && user.role_name === 'admin') { %>
         <div class="organization-actions" style="margin-top: 15px; margin-bottom: 15px; position: relative; z-index: 10;">
             <a href="/new-category" class="btn btn-primary" style="display: inline-block; text-decoration: none;">Add a New Category</a>
         </div>
+        <% } %>
     </main>
 <%- include('partials/footer') %>
