@@ -1,0 +1,30 @@
+<%- include('partials/header') %>
+<main>
+    <h1><%= title %></h1>
+
+    <h2>All Users</h2>
+        <div class="users-container">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(function(u) { %>
+                    <tr>
+                        <td><%= u.name %></td>
+                        <td><%= u.email %></td>
+                        <td><%= u.role_name %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <div style="margin: 1rem; ">
+            <a href="/dashboard" class="btn btn-primary" >Back to Dashboard</a>
+        </div>
+        </div>
+        
+<%- include('partials/footer') %>

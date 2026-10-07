@@ -62,5 +62,21 @@ const requireLogin = (req, res, next) => {
     next();
 };
 
+const getAllUsers = async() =>{
+    try{
+        const query = `
+            SELECT u.user_id, u.name, u.email, r.role_name
+            FROM users u
+            JOIN roles r ON u.role_id = r.role_id
+            ORDER BY u.name ASC
+            `;
+        const result = await db.query(query);
+        return result.rows;
+    }
+    catch(error){
+        console.log('Error fetching users from the database', error);
+        throw new Error('Error fetching users from the database');
+    }
+}
 
-export { createUser, authenticateUser, requireLogin };
+export { createUser, authenticateUser, requireLogin, getAllUsers };

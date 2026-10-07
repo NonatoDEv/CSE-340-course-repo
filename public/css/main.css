@@ -373,6 +373,7 @@ body {
   cursor: pointer;
   box-shadow: var(--shadow-sm);
   transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
 }
 .btn-primary:hover {
   background-color: #1d4ed8;
@@ -408,6 +409,43 @@ body {
     color: #0c5460;
     background-color: #d1ecf1;
     border-color: #bee5eb;
+}
+/*admin table*/
+.users-container{
+  width: 100%;
+  overflow-x: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    min-width: 500px;
+}
+.users-table thead tr {
+    background-color: #0b192c;
+    color: #ffffff;
+    text-align: left;
+}
+.users-table th,
+.users-table td {
+    padding: 10px 12px;
+}
+.users-table td:nth-child(2) {
+    word-break: break-all;
+}
+.users-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+.users-table tbody tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+.users-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+.users-table tbody tr:last-of-type {
+    border-bottom: 2px solid #0b192c;
 }
 /*footer*/
 .main-footer {
@@ -447,6 +485,26 @@ body {
   .btn-primary {
     width: auto;
     align-self: flex-start;
+  }
+  /*admin table*/
+  .table-container {
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .users-table {
+        font-size: 0.95rem;
+        min-width: auto;
+  }
+  .users-table th,
+  .users-table td {
+        padding: 12px 16px;
+  }
+  .users-table td:nth-child(2) {
+        word-break: normal; 
+  }
+  .users-table tbody tr:hover {
+        background-color: #e2e8f0;
+        transition: background-color 0.2s ease-in-out;
   }
 }
 /*desktop*/
@@ -502,9 +560,20 @@ body {
   max-width: 640px;
   padding: 2.25rem;
   }
-
   .btn-primary {
   width: auto;
   align-self: flex-start;
+  }
+  /*admin table*/
+  .table-container {
+        margin: 2rem auto;
+        max-width: 1000px;
+  }
+  .users-table {
+        font-size: 1rem;
+  }
+  .users-table th,
+  .users-table td {
+        padding: 15px 20px;
   }
 }

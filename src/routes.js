@@ -19,7 +19,7 @@ import { showAssignCategoriesForm, processAssignCategoriesForm } from './control
 import { showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
 import { categoryValidation, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm } from './controllers/categories.js';
 import { showUserRegistrationForm, processUserRegistrationForm, showDashboard } from './controllers/users.js';
-import { showLoginForm, processLoginForm, processLogout, requireRole } from './controllers/users.js';
+import { showLoginForm, processLoginForm, processLogout, requireRole, showAllUsersPage} from './controllers/users.js';
 import {requireLogin} from './models/users.js';
 
 
@@ -68,7 +68,8 @@ router.post('/login', processLoginForm);
 router.get('/logout', processLogout);
 //Protected dashboard route
 router.get('/dashboard', requireLogin, showDashboard);
-
+//Protected route to show all users, only accessible by admin
+router.get('/allUsers',requireLogin, requireRole('admin'), showAllUsersPage);
 
 // error-handling routes
 router.get('/test-error', testErrorPage);
