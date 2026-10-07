@@ -14,7 +14,7 @@ const processUserRegistrationForm = async (req, res) => {
         const passwordHash = await bcrypt.hash(password, salt);
 
         // Create the user in the database
-        const userId = await createUser(name, email, passwordHash);
+        await createUser(name, email, passwordHash);
 
         //redirect to the Home page after successful registration
         req.flash('success', 'Registration successful! Please log in.');

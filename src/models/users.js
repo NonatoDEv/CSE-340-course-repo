@@ -62,4 +62,5 @@ const requireLogin = (req, res, next) => {
     next();
 };
 
+
 export { createUser, authenticateUser, requireLogin };
