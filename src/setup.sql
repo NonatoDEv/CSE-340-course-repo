@@ -214,10 +214,11 @@ WHERE email = 'admin@example.com';
 SELECT users.user_id, users.email, roles.role_name 
 FROM users 
 JOIN roles ON users.role_id = roles.role_id;
-
+--create a volunteer's table
 CREATE TABLE volunteer_signup(
 	project_id INT NOT NULL,
 	user_id INT NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (project_id, user_id),
 	CONSTRAINT fk_project
 		FOREIGN KEY (project_id)
@@ -228,5 +229,5 @@ CREATE TABLE volunteer_signup(
 		REFERENCES users(user_id)
 		ON DELETE CASCADE
 );
---create a 
+--test column's table
 SELECT * FROM volunteer_signup;
