@@ -45,3 +45,6 @@
         <% }); %>
     <% } %>
     <% }); %>
+    <% if (locals.user && title !== 'Dashboard') { %>
+    <a href="/dashboard" class="btn-subtle">Go back to Dashboard</a>
+<% } %>

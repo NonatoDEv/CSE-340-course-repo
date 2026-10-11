@@ -383,6 +383,41 @@ body {
 .btn-primary:active {
   transform: translateY(0);
 }
+.btn-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: var(--radius);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease-in-out;
+}
+.btn-danger:hover {
+    background-color: #f5c6cb;
+    box-shadow: var(--shadow-md);
+}
+.btn-danger:active {
+    background-color: #f1b0b7;
+}
+.btn-subtle {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+.btn-subtle:hover {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
 /* Flash message styles */
 .alert {
     padding: 15px;

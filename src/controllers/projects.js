@@ -5,6 +5,7 @@ import { getAllCategories, getCategoriesByProjectId } from '../models/categories
 import { createNewProject } from '../models/projects.js';
 import { body, validationResult } from 'express-validator';
 import { updateProject } from '../models/projects.js';
+import { isVolunteer } from '../models/volunteers.js';
 
 const NUMBER_OF_UPCOMING_PROJECTS = 5;
 
@@ -56,7 +57,13 @@ const showProjectDetailsPage = async (req, res) => {
         const categories = await getCategoriesByProjectId(projectId);
         const title = 'Project Details';
 
-        res.render('project', { title, project, categories, allCategories});
+        let isUserVolunteered = false;
+        let user = req.session.user || null; 
+
+        if (user) {
+            isUserVolunteered = await isVolunteer(user.user_id, projectId);
+        }
+        res.render('project', { title, project, categories, allCategories, user, isUserVolunteered });
     }
     catch(error) {
         console.error('Error fetching project details:', error);

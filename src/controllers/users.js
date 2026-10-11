@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { createUser } from '../models/users.js';
 import { authenticateUser } from '../models/users.js';
 import {getAllUsers} from '../models/users.js';
+import { getProjectsByUserId } from '../models/volunteers.js';
 
 const showUserRegistrationForm = (req,res) =>{
     res.render('register', { title: 'Registration' });
@@ -67,13 +68,30 @@ const processLogout = (req, res) => {
     res.redirect('/login');
 };
 
-const showDashboard = (req, res) => {
-    const user = req.session.user;
-    res.render( 'dashboard', {
-        title: 'Dashboard',
-        name: user.name,
-        email: user.email 
+const showDashboard = async (req, res) => {
+    try {
+        const user = req.session.user;
+        const volunteeredProjects = await getProjectsByUserId(user.user_id);
+
+        res.render('dashboard', {
+            title: 'Dashboard',
+            name: user.name,
+            email: user.email,
+            user: user,
+            projects: volunteeredProjects 
         });
+    } catch (error) {
+        console.error('Error loading dashboard:', error);
+        req.flash('error', 'An error occurred while loading the dashboard. Please try again later.');
+    
+        res.render('dashboard', {
+            title: 'Dashboard',
+            name: req.session.user.name,
+            email: req.session.user.email,
+            user: req.session.user,
+            projects: [] 
+        });
+    }
 }
 
 const requireRole = (role) => {

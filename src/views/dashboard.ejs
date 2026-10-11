@@ -11,6 +11,31 @@
             <a class="btn btn-primary" href="/allUsers">View All Users</a>
         </div>
     <% } %>
+    <hr>
+    <h2>My Volunteered Projects</h2>
+    
+    <% if (projects && projects.length > 0) { %>
+        <ul style="list-style-type: none; padding: 0;">
+            <% projects.forEach(project => { %>
+                <li style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 5px;">
+                    
+                    <h3><%= project.title %></h3> 
+                    <p>Date: <%= new Date(project.project_date).toLocaleDateString() %></p>
+                    <p><small>Signed up on: <%= new Date(project.signed_up_at).toLocaleDateString() %></small></p>
+                    <hr>
+                    <div class="project-actions" style="display: flex; gap: 1rem; align-items: center;">
+                    <a href="/project/<%= project.project_id %>" class="btn btn-primary" style="text-decoration: none; margin: 1rem;">View Project</a>
+                    <form action="/volunteer/remove/<%= project.project_id %>" method="POST" style="margin: 0;">
+                        <button type="submit" class="btn btn-danger">Remove me from project</button>
+                    </form>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
+    <% } 
+    else { %>
+        <p>You haven't signed up to volunteer for any projects yet.</p>
+    <% } %>
     
 </main>
 

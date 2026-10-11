@@ -21,6 +21,7 @@ import { categoryValidation, showNewCategoryForm, processNewCategoryForm, showEd
 import { showUserRegistrationForm, processUserRegistrationForm, showDashboard } from './controllers/users.js';
 import { showLoginForm, processLoginForm, processLogout, requireRole, showAllUsersPage} from './controllers/users.js';
 import {requireLogin} from './models/users.js';
+import { addVolunteerForProject, removeVolunteerFromProject } from './controllers/volunteers.js';
 
 
 const router = express.Router();
@@ -70,6 +71,12 @@ router.get('/logout', processLogout);
 router.get('/dashboard', requireLogin, showDashboard);
 //Protected route to show all users, only accessible by admin
 router.get('/allUsers',requireLogin, requireRole('admin'), showAllUsersPage);
+//Routes to handle volunteer sign up and removal
+router.post('/volunteer/add/:projectId', requireLogin, addVolunteerForProject)
+router.post('/volunteer/remove/:projectId', requireLogin, removeVolunteerFromProject)
+
+
+
 
 // error-handling routes
 router.get('/test-error', testErrorPage);
