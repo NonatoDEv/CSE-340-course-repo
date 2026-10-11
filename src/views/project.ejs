@@ -38,11 +38,11 @@
                     <% if (locals.isUserVolunteered) { %>
                         <p style="color: green; font-weight: bold;">You are volunteering for this project.</p>
                         
-                        <form action="/volunteer/remove/<%= project.project_id || project.id %>" method="POST">
+                        <form action="/volunteer/remove/<%= project.project_id || project.id %>?origin=project" method="POST">
                             <button type="submit" class="btn btn-danger">Remove me as a volunteer</button>
                         </form>
                     <% } else { %>
-                        <form action="/volunteer/add/<%= project.project_id || project.id %>" method="POST">
+                        <form action="/volunteer/add/<%= project.project_id || project.id %>?origin=project" method="POST">
                             <button type="submit" class="btn btn-primary">Volunteer for this project</button>
                         </form>
                     <% } %>

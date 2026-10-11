@@ -23,6 +23,7 @@ const addVolunteerForProject = async (req, res) => {
 const removeVolunteerFromProject = async (req, res) => {
     const userId = req.session.user.user_id;
     const projectId = req.params.projectId;
+    const origin = req.query.origin;
     try{
         const showRemoveVolunteer = await removeVolunteer(userId, projectId);
         if (showRemoveVolunteer.rowCount > 0) {
@@ -36,7 +37,12 @@ const removeVolunteerFromProject = async (req, res) => {
         console.error('Error occurred while removing volunteer from project:', error);
         req.flash('error', 'An error occurred while removing yourself from volunteering for this project.');
     }
-    res.redirect(`/project/${projectId}`);
+    if (origin === 'dashboard') {
+        res.redirect('/dashboard');
+    } 
+    else {
+        res.redirect('/projects');
+    }
 }
 
 export{ addVolunteerForProject, removeVolunteerFromProject}

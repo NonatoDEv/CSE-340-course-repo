@@ -25,7 +25,7 @@
                     <hr>
                     <div class="project-actions" style="display: flex; gap: 1rem; align-items: center;">
                     <a href="/project/<%= project.project_id %>" class="btn btn-primary" style="text-decoration: none; margin: 1rem;">View Project</a>
-                    <form action="/volunteer/remove/<%= project.project_id %>" method="POST" style="margin: 0;">
+                    <form action="/volunteer/remove/<%= project.project_id %>?origin=dashboard" method="POST" style="margin: 0;">
                         <button type="submit" class="btn btn-danger">Remove me from project</button>
                     </form>
                     </div>
